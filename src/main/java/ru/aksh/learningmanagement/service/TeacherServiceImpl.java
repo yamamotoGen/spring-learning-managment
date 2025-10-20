@@ -1,14 +1,15 @@
 package ru.aksh.learningmanagement.service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.aksh.learningmanagement.domain.Teacher;
 import ru.aksh.learningmanagement.exception.TeacherNotFoundException;
 import ru.aksh.learningmanagement.mapper.TeacherMapper;
+import ru.aksh.learningmanagement.model.request.TeacherRequest;
 import ru.aksh.learningmanagement.model.response.TeacherResponse;
 import ru.aksh.learningmanagement.repository.TeacherRepository;
-
-import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -17,8 +18,8 @@ public class TeacherServiceImpl implements TeacherService {
     private final TeacherMapper teacherMapper;
 
     @Override
-    public TeacherResponse createTeacher(String firstName, String lastName) {
-        Teacher teacher = teacherRepository.save(new Teacher(firstName, lastName));
+    public TeacherResponse createTeacher(TeacherRequest request) {
+        Teacher teacher = teacherRepository.save(new Teacher(request.getFirstName(), request.getLastName()));
         return teacherMapper.toTeacherResponse(teacher);
     }
 
@@ -30,21 +31,23 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public List<TeacherResponse> findAll() {
-        List<Teacher> teachers = teacherRepository.findAll();
-        return teacherMapper.toTeacherResponseList(teachers);
+    public Page<TeacherResponse> findAll(Pageable pageable) {
+        Page<Teacher> teachers = teacherRepository.findAll(pageable);
+        return teacherMapper.toTeacherResponsePage(teachers);
     }
 
     @Override
-    public void updateTeacher(Long id, Teacher updateTeacherDetails) {
+    public void updateTeacher(Long id, TeacherRequest request) {
         Teacher teacher = teacherRepository.findById(id)
                 .orElseThrow(() -> new TeacherNotFoundException("Teacher id " + id + " is not found"));
-        teacherMapper.updateTeacherResponse(teacher, updateTeacherDetails);
+        teacherMapper.updateTeacherRequest(teacher, request);
         teacherRepository.save(teacher);
     }
 
     @Override
     public void deleteById(Long id) {
-        teacherRepository.deleteById(id);
+        Teacher teacher = teacherRepository.findById(id)
+                .orElseThrow(() -> new TeacherNotFoundException("Teacher id " + id + " is not found"));
+        teacherRepository.delete(teacher);
     }
 }
