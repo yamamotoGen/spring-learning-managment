@@ -3,3 +3,5 @@ databaseChangeLog:
       file: db/changelog/changeset/01-create-teachers-table.yml
   - include:
       file: db/changelog/changeset/02-add-teachers-system-fields.yml
+  - include:
+      file: db/changelog/changeset/03-create-groups-table.yml
