@@ -20,11 +20,11 @@ public class Teacher {
     private Long id;
 
     @NonNull
-    @Column(name = "first_name")
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
     @NonNull
-    @Column(name = "last_name")
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 
     @CreationTimestamp

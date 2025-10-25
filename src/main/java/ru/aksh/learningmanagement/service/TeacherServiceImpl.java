@@ -25,9 +25,7 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public TeacherResponse findById(Long id) {
-        Teacher teacher = teacherRepository.findById(id)
-                .orElseThrow(() -> new TeacherNotFoundException("Teacher id " + id + " is not found"));
-        return teacherMapper.toTeacherResponse(teacher);
+        return teacherMapper.toTeacherResponse(getTeacherById(id));
     }
 
     @Override
@@ -38,16 +36,19 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public void updateTeacher(Long id, TeacherRequest request) {
-        Teacher teacher = teacherRepository.findById(id)
-                .orElseThrow(() -> new TeacherNotFoundException("Teacher id " + id + " is not found"));
+        Teacher teacher = getTeacherById(id);
+
         teacherMapper.updateTeacherRequest(teacher, request);
         teacherRepository.save(teacher);
     }
 
     @Override
     public void deleteById(Long id) {
-        Teacher teacher = teacherRepository.findById(id)
+        teacherRepository.delete(getTeacherById(id));
+    }
+
+    private Teacher getTeacherById(Long id) {
+        return teacherRepository.findById(id)
                 .orElseThrow(() -> new TeacherNotFoundException("Teacher id " + id + " is not found"));
-        teacherRepository.delete(teacher);
     }
 }

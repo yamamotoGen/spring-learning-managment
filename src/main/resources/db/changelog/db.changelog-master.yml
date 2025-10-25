@@ -1,5 +1,5 @@
 databaseChangeLog:
   - include:
-      file: db/changelog/changeset/create-teacher-table.yml
+      file: db/changelog/changeset/01-create-teachers-table.yml
   - include:
-      file: db/changelog/changeset/add-teacher-system-fields.yml
+      file: db/changelog/changeset/02-add-teachers-system-fields.yml

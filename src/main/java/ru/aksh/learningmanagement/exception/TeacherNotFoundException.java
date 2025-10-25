@@ -1,6 +1,6 @@
 package ru.aksh.learningmanagement.exception;
 
-public class TeacherNotFoundException extends RuntimeException {
+public class TeacherNotFoundException extends EntityNotFoundRuntimeException {
     public TeacherNotFoundException(String s) {
         super(s);
     }
