@@ -9,3 +9,5 @@ databaseChangeLog:
       file: db/changelog/changeset/04-create-students-table.yml
   - include:
       file: db/changelog/changeset/05-create-courses-table.yml
+  - include:
+      file: db/changelog/changeset/06-add-schedules-table.yml
