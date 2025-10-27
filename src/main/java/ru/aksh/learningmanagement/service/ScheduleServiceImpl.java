@@ -3,6 +3,7 @@ package ru.aksh.learningmanagement.service;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import ru.aksh.learningmanagement.domain.Course;
 import ru.aksh.learningmanagement.domain.Group;
@@ -22,6 +23,7 @@ import ru.aksh.learningmanagement.repository.GroupRepository;
 import ru.aksh.learningmanagement.repository.ScheduleRepository;
 import ru.aksh.learningmanagement.repository.TeacherRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -88,6 +90,14 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public void deleteById(Long id) {
         scheduleRepository.delete(getScheduleById(id));
+    }
+
+    @Scheduled(cron = "0 0 10 * * *")
+    public void deleteAfterOneYear() {
+        LocalDateTime createdAtYearAgo = LocalDateTime.now().minusYears(1);
+        List<Schedule> oldSchedules = scheduleRepository.findByCreationDateBefore(createdAtYearAgo);
+
+        scheduleRepository.deleteAll(oldSchedules);
     }
 
     private Schedule getScheduleById(Long id) {
