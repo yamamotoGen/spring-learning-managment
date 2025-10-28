@@ -34,13 +34,21 @@ public class ScheduleController {
     }
 
     @GetMapping("/groups/{groupId}")
-    public ScheduleGroupResponse findScheduleByGroupId(@PathVariable Long groupId) {
-        return scheduleService.findScheduleByGroupId(groupId);
+    public ScheduleGroupResponse findScheduleByGroupId(
+            @PathVariable Long groupId,
+            @RequestParam(value = "page", defaultValue = "0") @Min(0) Integer page,
+            @RequestParam(value = "size", defaultValue = "20") @Min(1) @Max(100) Integer size,
+            @RequestParam(value = "sort", defaultValue = "id") String sort) {
+        return scheduleService.findScheduleByGroupId(groupId, PageRequest.of(page, size, Sort.by(sort)));
     }
 
     @GetMapping("/teachers/{teacherId}")
-    public ScheduleTeacherResponse findScheduleByTeacherId(@PathVariable Long teacherId) {
-        return scheduleService.findScheduleByTeacherId(teacherId);
+    public ScheduleTeacherResponse findScheduleByTeacherId(
+            @PathVariable Long teacherId,
+            @RequestParam(value = "page", defaultValue = "0") @Min(0) Integer page,
+            @RequestParam(value = "size", defaultValue = "20") @Min(1) @Max(100) Integer size,
+            @RequestParam(value = "sort", defaultValue = "id") String sort) {
+        return scheduleService.findScheduleByTeacherId(teacherId, PageRequest.of(page, size, Sort.by(sort)));
     }
 
     @PutMapping("/{id}")

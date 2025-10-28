@@ -9,7 +9,6 @@ import ru.aksh.learningmanagement.domain.Schedule;
 import ru.aksh.learningmanagement.model.request.ScheduleRequest;
 import ru.aksh.learningmanagement.model.response.ScheduleBaseResponse;
 import ru.aksh.learningmanagement.model.response.ScheduleCourseResponse;
-import ru.aksh.learningmanagement.model.response.ScheduleTeacherResponse;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING, uses = {
         TeacherMapper.class, GroupMapper.class
@@ -19,9 +18,11 @@ public interface ScheduleMapper {
 
     ScheduleCourseResponse toScheduleCourseResponse(Schedule schedule);
 
-    ScheduleTeacherResponse toTeacherScheduleResponse(Schedule scheduleById);
+    default Page<ScheduleCourseResponse> toScheduleCourseResponsePage(Page<Schedule> schedules) {
+        return schedules.map(this::toScheduleCourseResponse);
+    }
 
-    default Page<ScheduleBaseResponse> toScheduleResponsePage(Page<Schedule> schedules) {
+    default Page<ScheduleBaseResponse> toScheduleBaseResponsePage(Page<Schedule> schedules) {
         return schedules.map(this::toScheduleBaseResponse);
     }
 

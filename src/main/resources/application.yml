@@ -16,3 +16,5 @@ spring:
     properties:
       hibernate:
         format-sql: true
+  schedule:
+    daily: "0 0 10 * * *"

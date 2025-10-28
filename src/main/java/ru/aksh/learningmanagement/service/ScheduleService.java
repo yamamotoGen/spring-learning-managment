@@ -13,9 +13,9 @@ public interface ScheduleService {
 
     Page<ScheduleBaseResponse> findAllSchedule(Pageable pageable);
 
-    ScheduleGroupResponse findScheduleByGroupId(Long groupId);
+    ScheduleGroupResponse findScheduleByGroupId(Long groupId, Pageable pageable);
 
-    ScheduleTeacherResponse findScheduleByTeacherId(Long id);
+    ScheduleTeacherResponse findScheduleByTeacherId(Long teacherId, Pageable pageable);
 
     void updateSchedule(Long id, @Valid ScheduleRequest request);
 

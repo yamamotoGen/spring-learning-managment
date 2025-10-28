@@ -3,7 +3,6 @@ package ru.aksh.learningmanagement.service;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import ru.aksh.learningmanagement.domain.Course;
 import ru.aksh.learningmanagement.domain.Group;
@@ -23,7 +22,6 @@ import ru.aksh.learningmanagement.repository.GroupRepository;
 import ru.aksh.learningmanagement.repository.ScheduleRepository;
 import ru.aksh.learningmanagement.repository.TeacherRepository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -49,27 +47,23 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public Page<ScheduleBaseResponse> findAllSchedule(Pageable pageable) {
         Page<Schedule> schedules = scheduleRepository.findAll(pageable);
-        return scheduleMapper.toScheduleResponsePage(schedules);
+        return scheduleMapper.toScheduleBaseResponsePage(schedules);
     }
 
     @Override
-    public ScheduleGroupResponse findScheduleByGroupId(Long groupId) {
-        List<Schedule> scheduleList = scheduleRepository.findByGroupId(groupId);
-        List<ScheduleCourseResponse> scheduleCourseResponses = scheduleList.stream()
-                .map(scheduleMapper::toScheduleCourseResponse)
-                .toList();
+    public ScheduleGroupResponse findScheduleByGroupId(Long groupId, Pageable pageable) {
+        Page<Schedule> schedules = scheduleRepository.findByGroupId(groupId, pageable);
+        Page<ScheduleCourseResponse> scheduleCourseResponses = scheduleMapper.toScheduleCourseResponsePage(schedules);
 
         GroupResponse groupResponse = groupMapper.toGroupResponse(getGroupById(groupId));
         return new ScheduleGroupResponse(groupResponse, scheduleCourseResponses);
     }
 
     @Override
-    public ScheduleTeacherResponse findScheduleByTeacherId(Long teacherId) {
+    public ScheduleTeacherResponse findScheduleByTeacherId(Long teacherId, Pageable pageable) {
         Course course = courseRepository.findByTeacherId(teacherId);
-        List<Schedule> scheduleList = scheduleRepository.findByCourseId(course.getId());
-        List<ScheduleCourseResponse> scheduleCourseResponses = scheduleList.stream()
-                .map(scheduleMapper::toScheduleCourseResponse)
-                .toList();
+        Page<Schedule> schedules = scheduleRepository.findByCourseId(course.getId(), pageable);
+        Page<ScheduleCourseResponse> scheduleCourseResponses = scheduleMapper.toScheduleCourseResponsePage(schedules);
 
         TeacherResponse teacherResponse = teacherMapper.toTeacherResponse(getTeacherById(teacherId));
         return new ScheduleTeacherResponse(teacherResponse, scheduleCourseResponses);
@@ -90,14 +84,6 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public void deleteById(Long id) {
         scheduleRepository.delete(getScheduleById(id));
-    }
-
-    @Scheduled(cron = "0 0 10 * * *")
-    public void deleteAfterOneYear() {
-        LocalDateTime createdAtYearAgo = LocalDateTime.now().minusYears(1);
-        List<Schedule> oldSchedules = scheduleRepository.findByCreationDateBefore(createdAtYearAgo);
-
-        scheduleRepository.deleteAll(oldSchedules);
     }
 
     private Schedule getScheduleById(Long id) {
