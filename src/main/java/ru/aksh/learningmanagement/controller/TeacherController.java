@@ -1,5 +1,8 @@
 package ru.aksh.learningmanagement.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -15,6 +18,7 @@ import ru.aksh.learningmanagement.service.TeacherService;
 @RestController
 @RequestMapping("/api/v1/teachers")
 @RequiredArgsConstructor
+@Tag(name = "Teachers", description = "Interaction with the teacher")
 public class TeacherController {
     private final TeacherService teacherService;
 
@@ -24,10 +28,14 @@ public class TeacherController {
     }
 
     @GetMapping("/all")
+    @Operation(summary = "Finding all teacher from the database")
     public Page<TeacherResponse> findAllTeachers(
-            @RequestParam(value = "page", defaultValue = "0") @Min(0) Integer page,
-            @RequestParam(value = "size", defaultValue = "20") @Min(1) @Max(100) Integer size,
-            @RequestParam(value = "sort", defaultValue = "id") String sort) {
+            @RequestParam(value = "page", defaultValue = "0") @Min(0)
+            @Parameter(description = "Page number", example = "0") Integer page,
+            @RequestParam(value = "size", defaultValue = "20") @Min(1) @Max(100)
+            @Parameter(description = "Amount of data on page", example = "10") Integer size,
+            @RequestParam(value = "sort", defaultValue = "id")
+            @Parameter(description = "Sort parameter", example = "firstName") String sort) {
         return teacherService.findAll(PageRequest.of(page, size, Sort.by(sort)));
     }
 
