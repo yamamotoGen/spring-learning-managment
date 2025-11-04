@@ -1,8 +1,7 @@
 spring:
   datasource:
-    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+    driver-class-name: org.postgresql.Driver
   hibernate:
-    ddl-auto: create
     show-sql: true
     properties:
       hibernate:
