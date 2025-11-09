@@ -70,7 +70,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public void updateSchedule(Long id, ScheduleRequest request) {
+    public ScheduleBaseResponse updateSchedule(Long id, ScheduleRequest request) {
         Course course = getCourseById(request.getCourseId());
         Group group = getGroupById(request.getGroupId());
         Schedule schedule = getScheduleById(id);
@@ -79,6 +79,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         schedule.setCourse(course);
         schedule.setGroup(group);
         scheduleRepository.save(schedule);
+        return scheduleMapper.toScheduleBaseResponse(schedule);
     }
 
     @Override

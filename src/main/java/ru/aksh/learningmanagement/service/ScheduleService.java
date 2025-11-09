@@ -17,7 +17,7 @@ public interface ScheduleService {
 
     ScheduleTeacherResponse findScheduleByTeacherId(Long teacherId, Pageable pageable);
 
-    void updateSchedule(Long id, @Valid ScheduleRequest request);
+    ScheduleBaseResponse updateSchedule(Long id, @Valid ScheduleRequest request);
 
     void deleteById(Long id);
 }
