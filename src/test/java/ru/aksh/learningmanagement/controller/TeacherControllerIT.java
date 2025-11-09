@@ -10,11 +10,9 @@ import org.springframework.http.ResponseEntity;
 import ru.aksh.learningmanagement.domain.Teacher;
 import ru.aksh.learningmanagement.repository.TeacherRepository;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
-class TeacherControllerIT extends AbstractTestIT{
+class TeacherControllerIT extends AbstractTestIT {
     @Autowired
     private TeacherRepository teacherRepository;
 
@@ -32,10 +30,10 @@ class TeacherControllerIT extends AbstractTestIT{
 
         ResponseEntity<Teacher> response = getResponseTeacherEntity(teacher);
 
-        assertThat(response.getStatusCode(), is(HttpStatus.OK));
-        assertThat(response.getBody().getId(), notNullValue());
-        assertThat(response.getBody().getFirstName(), is("Иван"));
-        assertThat(response.getBody().getLastName(), is("Сидоров"));
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody().getId()).isNotNull();
+        assertThat(response.getBody().getFirstName()).isEqualTo("Иван");
+        assertThat(response.getBody().getLastName()).isEqualTo("Сидоров");
     }
 
     @Test
@@ -45,7 +43,7 @@ class TeacherControllerIT extends AbstractTestIT{
         ResponseEntity<Teacher> response = restTemplate.postForEntity(
                 "/api/v1/teachers/create", request, Teacher.class);
 
-        assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 
     @Test
@@ -54,7 +52,7 @@ class TeacherControllerIT extends AbstractTestIT{
 
         ResponseEntity<Teacher> response = getResponseTeacherEntity(teacher);
 
-        assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 
     @Test
@@ -63,7 +61,7 @@ class TeacherControllerIT extends AbstractTestIT{
 
         ResponseEntity<Teacher> response = getResponseTeacherEntity(teacher);
 
-        assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 
     private ResponseEntity<Teacher> getResponseTeacherEntity(Teacher teacher) {
