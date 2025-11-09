@@ -23,6 +23,8 @@
         <liquibase.version>5.0.1</liquibase.version>
         <commons-lang3.version>3.19.0</commons-lang3.version>
         <testcontainers.version>1.21.3</testcontainers.version>
+        <slf4j.version>2.0.17</slf4j.version>
+        <logback.version>1.5.20</logback.version>
         <maven.compiler.plugin.version>3.14.0</maven.compiler.plugin.version>
 	</properties>
 
@@ -109,6 +111,19 @@
             <artifactId>postgresql</artifactId>
             <version>${testcontainers.version}</version>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
+            <scope>compile</scope>
         </dependency>
 	</dependencies>
 
